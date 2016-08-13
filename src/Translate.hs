@@ -23,4 +23,4 @@ translate xs = template $ forM_ xs translateEach
 translateEach :: Token -> Html
 translateEach (Text x)  = string x
 translateEach (Img s a) = img ! src (toValue s) ! alt (toValue a)
-translateEach (Div xs)  = H.div (forM_ xs translateEach)
+translateEach (Div c xs)  = H.div ! class_ (toValue c) $ forM_ xs translateEach

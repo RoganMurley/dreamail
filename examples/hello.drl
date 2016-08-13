@@ -1,4 +1,6 @@
-div {
+div . class "header"
     text "Hello, World!"
     img . src "https://upload.wikimedia.org/wikipedia/en/3/33/Hello_world!.png" . alt "Hello, World!"
-}
+div . class "panel"
+    text "Look, significant whitespace!"
+    text "How trendy!"

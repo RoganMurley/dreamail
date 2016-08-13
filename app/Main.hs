@@ -3,10 +3,9 @@ module Main where
 import System.Environment (getArgs)
 
 import Data.Either.Combinators (fromRight')
-import Text.Parsec (parse)
 import Text.Blaze.Html.Renderer.Pretty (renderHtml)
 
-import Parse (whole)
+import Parse (iParse, whole)
 import Translate (translate)
 
 
@@ -14,4 +13,6 @@ main :: IO ()
 main = do
    [f]   <- getArgs
    s     <- readFile f
-   (putStr . renderHtml . translate . fromRight') (parse whole f s)
+   case iParse whole f s of
+        Left  err    -> print err
+        Right result -> (putStr . renderHtml . translate) result

@@ -20,6 +20,8 @@ library
                        , Translate
   build-depends:       base >= 4.7 && < 5
                        , blaze-html
+                       , indents
+                       , mtl
                        , parsec
   default-language:    Haskell2010
 
