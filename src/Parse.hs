@@ -25,12 +25,12 @@ whole = sepEndBy line newline <* eof
 
 line = text <|> img <|> div_p
 
-text = Text <$> ((string "text") *> spaces *> attr <* spaces)
+text = Text <$> ((string "text") *> spaces *> stringLiteral <* spaces)
 
-img = Img <$>
-    ((string "img") *> spaces *> (string ".") *> spaces *> (string "src") *> spaces *> attr) <*>
-    (spaces *> (string ".") *> spaces *> (string "alt") *> spaces *> attr)
+img = Img <$> (string "img" *> spaces *> attr "src") <*> (spaces *> attr "alt")
 
-attr = (string "\"") *> (manyTill anyChar (char '\"'))
+div_p = withBlock Div (string "div" *> spaces *> option "" (attr "class") <* spaces) line
 
-div_p = withBlock Div (string "div" *> spaces *> string "." *> spaces *> string "class" *> spaces *> attr <* spaces) line
+attr name = string "." *> spaces *> (string name) *> space *> stringLiteral
+
+stringLiteral = (string "\"") *> (manyTill anyChar (char '\"'))
