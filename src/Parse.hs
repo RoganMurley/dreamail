@@ -11,10 +11,12 @@ import Text.Parsec hiding (many, optional, (<|>), for_)
 import Tokens
 
 
-whole = many (text <|> img)
+whole = many1 (text <|> img)
 
-text = Text <$> ((string "Hello, World!") <* spaces)
+text = Text <$> ((string "text") *> spaces *> attr <* spaces)
 
-img = Img <$> ((string "img") *> spaces *> string "." *> spaces *> (string "src") *> spaces *> string "\"" *> url <* string "\"" <* spaces)
+img = Img <$>
+    ((string "img") *> spaces *> (string ".") *> spaces *> (string "src") *> spaces *> attr) <*>
+    (spaces *> (string ".") *> spaces *> (string "alt") *> spaces *> attr)
 
-url = many1 (alphaNum <|> char '_')
+attr = (string "\"") *> (manyTill anyChar (char '\"'))

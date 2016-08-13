@@ -22,4 +22,4 @@ translate xs = template $ forM_ xs translateEach
 
 translateEach :: Token -> Html
 translateEach (Text x)  = string x
-translateEach (Img s) = img ! src (toValue s)
+translateEach (Img s a) = img ! src (toValue s) ! alt (toValue a)
