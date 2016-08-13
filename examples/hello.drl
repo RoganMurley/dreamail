@@ -1,3 +1,4 @@
-text "Hello, World!"
-
-img . src "https://upload.wikimedia.org/wikipedia/en/3/33/Hello_world!.png" . alt "Hello, World!"
+div {
+    text "Hello, World!"
+    img . src "https://upload.wikimedia.org/wikipedia/en/3/33/Hello_world!.png" . alt "Hello, World!"
+}

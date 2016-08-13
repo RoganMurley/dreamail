@@ -15,7 +15,7 @@ template b = docTypeHtml $ do
     H.head $ do
         H.title "Made with Dreamail"
     body $ do
-        H.div b
+        b
 
 translate :: [Token] -> Html
 translate xs = template $ forM_ xs translateEach
@@ -23,3 +23,4 @@ translate xs = template $ forM_ xs translateEach
 translateEach :: Token -> Html
 translateEach (Text x)  = string x
 translateEach (Img s a) = img ! src (toValue s) ! alt (toValue a)
+translateEach (Div xs)  = H.div (forM_ xs translateEach)
