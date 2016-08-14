@@ -31,7 +31,7 @@ img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> att
 
 div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
 
-row   = withBlock (flip (const . Row)) (string "row") line
+row   = withBlock (flip (const . Row)) (string "row" <* spaces) line
 
 attr name = string "." *> onlySpaces *> (string name) *> onlySpaces *> stringLiteral
 

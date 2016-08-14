@@ -51,12 +51,14 @@ translate xs = template $ forM_ xs translateEach
 translateEach :: Token -> Html
 translateEach (Text x)   = string x
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
-translateEach (Div xs) = H.div $ forM_ xs translateEach
-translateEach (Row xs)   =
+translateEach (Div xs)   = H.div $ forM_ xs translateEach
+translateEach (Row xs)   = do
+    preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
     table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style "width:100%;max-width:300px;" $
         tr $
             td ! class_ "col-first-td" ! A.style "padding-left:20px;padding-right:20px;" $
                 forM_ xs translateEach
+    preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
 
 
 leftmargin :: AttributeValue -> Attribute

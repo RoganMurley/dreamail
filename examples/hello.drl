@@ -1,18 +1,4 @@
-div
-    text "Hello, World!"
-    text "Hello, Toad!"
-    text "rock"
-    img . src "toad.png" . alt "toady!"
-    div
-        text "lol"
-        div
-            text "rolo"
-        div
-            text "mind"
-div
-    text "loss"
-    div
-        div
-            div
-                div
-            text "rose"
+row
+    text "row 1"
+row
+    text "row 2"
