@@ -21,16 +21,20 @@ iParse aParser source_name input =
     runIndent source_name $ runParserT aParser () source_name input
 
 
-whole = sepEndBy line newline <* eof
+whole = block line <* eof
 
-line = text <|> img <|> div_p
+line = (text <|> img <|> div_p <|> row) <* spaces
 
-text = Text <$> ((string "text") *> spaces *> stringLiteral <* spaces)
+text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
 
-img = Img <$> (string "img" *> spaces *> attr "src") <*> (spaces *> attr "alt")
+img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> attr "alt")
 
-div_p = withBlock Div (string "div" *> spaces *> option "" (attr "class") <* spaces) line
+div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
 
-attr name = string "." *> spaces *> (string name) *> space *> stringLiteral
+row   = withBlock (flip (const . Row)) (string "row") line
+
+attr name = string "." *> onlySpaces *> (string name) *> onlySpaces *> stringLiteral
 
 stringLiteral = (string "\"") *> (manyTill anyChar (char '\"'))
+
+onlySpaces = many space

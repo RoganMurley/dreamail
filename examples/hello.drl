@@ -1,6 +1,18 @@
-div . class "header"
-    text "Hello, World!"
-    img . src "https://upload.wikimedia.org/wikipedia/en/3/33/Hello_world!.png" . alt "Hello, World!"
 div
-    text "Look, significant whitespace!"
-    text "How trendy!"
+    text "Hello, World!"
+    text "Hello, Toad!"
+    text "rock"
+    img . src "toad.png" . alt "toady!"
+    div
+        text "lol"
+        div
+            text "rolo"
+        div
+            text "mind"
+div
+    text "loss"
+    div
+        div
+            div
+                div
+            text "rose"

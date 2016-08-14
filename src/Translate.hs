@@ -19,8 +19,28 @@ template b = docTypeHtml $ do
         meta ! httpEquiv "X-UA-Compatible" ! content "IE=edge"                             -- Enable media queries for windows phone 8.
         meta ! name "format-detection"     ! content "telephone=no"                        -- Disable auto telephone linking in iOS.
         H.title "Made with Dreamail"
+        H.style "/* Level Two: reset mobile gmail first gutters */\
+            \.col-first-td {\
+              \padding-left:  20px !important;\
+              \padding-right: 10px !important;\
+            \}\
+            \.col-last-td {\
+              \padding-left:  10px !important;\
+              \padding-right: 20px !important;\
+            \}\
+            \/* Level Three: use mobile gutter */\
+            \@media screen and (max-width: 599px) {\
+              \.col {\
+                \width: 100% !important;\
+                \max-width: 100% !important;\
+              \}\
+              \.col td {\
+                \padding-left:  10px !important;\
+                \padding-right: 10px !important;\
+              \}\
+            \}"
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ do
-        table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $
+        table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
             tr $
                 td $
                     b
@@ -29,9 +49,14 @@ translate :: [Token] -> Html
 translate xs = template $ forM_ xs translateEach
 
 translateEach :: Token -> Html
-translateEach (Text x)  = string x
-translateEach (Img s a) = img ! src (toValue s) ! alt (toValue a)
-translateEach (Div c xs)  = H.div ! class_ (toValue c) $ forM_ xs translateEach
+translateEach (Text x)   = string x
+translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
+translateEach (Div xs) = H.div $ forM_ xs translateEach
+translateEach (Row xs)   =
+    table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style "width:100%;max-width:300px;" $
+        tr $
+            td ! class_ "col-first-td" ! A.style "padding-left:20px;padding-right:20px;" $
+                forM_ xs translateEach
 
 
 leftmargin :: AttributeValue -> Attribute

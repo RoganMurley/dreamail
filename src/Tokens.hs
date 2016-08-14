@@ -1,6 +1,6 @@
 module Tokens where
 
-data Token =  Div Class [Token] | Text String | Img Src Alt
+data Token =  Row [Token] | Div [Token] | Img Src Alt | Text String
    deriving (Show)
 
 type Src   = String
