@@ -6,7 +6,9 @@ Writing an HTML email is a horrible experience. Standards are a joke, features w
 
 ## What is it?
 
-It's an email markup language that compiles to HTML. It takes care of the nasty bits; you won't even know the tables, conditionals and inline styles are there. It only supports what's proven to work. It's also very strict. With how sensitive these clients are, there's no room for error.
+It's an email markup language that compiles to HTML. It takes care of the nasty bits; you won't even know the tables, conditionals and inline styles are there. It only supports what's proven to work. It's also very strict.
+
+With how sensitive these clients are, there's no room for error.
 
 ## Does it work yet?
 
