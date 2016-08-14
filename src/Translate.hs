@@ -4,8 +4,8 @@ module Translate where
 
 import Control.Monad
 
-import Text.Blaze.Html5 as H
-import Text.Blaze.Html5.Attributes as A
+import Text.Blaze.Html4.Transitional as H
+import Text.Blaze.Html4.Transitional.Attributes as A
 
 import Tokens
 
