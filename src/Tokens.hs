@@ -5,4 +5,3 @@ data Token =  Row [Token] | Col [Token] | Div [Token] | Img Src Alt | Text Strin
 
 type Src   = String
 type Alt   = String
-type Class = String

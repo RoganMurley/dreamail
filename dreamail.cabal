@@ -5,9 +5,9 @@ description:         Please see README.md
 homepage:            https://github.com/githubuser/dreamail#readme
 license:             BSD3
 license-file:        LICENSE
-author:              Author name here
-maintainer:          example@example.com
-copyright:           2016 Author name here
+author:              Rogan Murley
+maintainer:          rogan@roganmurley.com
+copyright:           2016 Rogan Murley
 category:            Web
 build-type:          Simple
 -- extra-source-files:
@@ -15,7 +15,9 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Parse
+  exposed-modules:       AST
+                       , Parse
+                       , Semantics
                        , Tokens
                        , Translate
   build-depends:       base >= 4.7 && < 5

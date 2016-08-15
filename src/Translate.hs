@@ -8,7 +8,7 @@ import Text.Blaze.Html4.Transitional as H
 import Text.Blaze.Html4.Transitional.Attributes as A
 import Text.Blaze.Internal (attribute, Attribute, AttributeValue)
 
-import Tokens
+import AST
 
 
 template :: Html -> Html
@@ -45,10 +45,10 @@ template b = docTypeHtml $ do
             \}"
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
-translate :: [Token] -> Html
+translate :: [AST] -> Html
 translate xs = template $ forM_ xs translateEach
 
-translateEach :: Token -> Html
+translateEach :: AST -> Html
 translateEach (Text x)   = string x
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
