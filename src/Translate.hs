@@ -24,6 +24,10 @@ template b = docTypeHtml $ do
               \padding-left:  20px !important;\
               \padding-right: 10px !important;\
             \}\
+            \.col-td {\
+              \padding-left:  10px !important;\
+              \padding-right: 10px !important;\
+            \}\
             \.col-last-td {\
               \padding-left:  10px !important;\
               \padding-right: 20px !important;\
@@ -39,11 +43,7 @@ template b = docTypeHtml $ do
                 \padding-right: 10px !important;\
               \}\
             \}"
-    body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ do
-        table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
-            tr $
-                td $
-                    b
+    body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
 translate :: [Token] -> Html
 translate xs = template $ forM_ xs translateEach
@@ -52,13 +52,18 @@ translateEach :: Token -> Html
 translateEach (Text x)   = string x
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
-translateEach (Row xs)   = do
+translateEach (Col xs)   = do
     preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
     table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style "width:100%;max-width:300px;" $
         tr $
             td ! class_ "col-first-td" ! A.style "padding-left:20px;padding-right:20px;" $
                 forM_ xs translateEach
     preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
+translateEach (Row xs)   =
+    table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
+        tr $
+            td $
+                forM_ xs translateEach
 
 
 leftmargin :: AttributeValue -> Attribute

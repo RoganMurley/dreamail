@@ -21,9 +21,9 @@ iParse aParser source_name input =
     runIndent source_name $ runParserT aParser () source_name input
 
 
-whole = block line <* eof
+whole = block row <* eof
 
-line = (text <|> img <|> div_p <|> row) <* spaces
+line = (text <|> img <|> div_p) <* spaces
 
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
 
@@ -31,7 +31,9 @@ img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> att
 
 div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
 
-row   = withBlock (flip (const . Row)) (string "row" <* spaces) line
+col   = withBlock (flip (const . Col)) (string "col" <* spaces) line
+
+row   = withBlock (flip (const . Row)) (string "row" <* spaces) col
 
 attr name = string "." *> onlySpaces *> (string name) *> onlySpaces *> stringLiteral
 

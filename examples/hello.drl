@@ -1,4 +1,9 @@
 row
-    text "row 1"
+    col
+        text "Gmail First Gutters Demo"
+
 row
-    text "row 2"
+    col
+        text "I felt sad at this, for it showed I was not such a good Scarecrow after all; but the old crow comforted me, saying, 'If you only had brains in your head you would be as good a man as any of them, and a better man than some of them."
+    col
+        text "row 2"
