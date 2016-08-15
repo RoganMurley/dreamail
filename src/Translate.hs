@@ -52,13 +52,17 @@ translateEach :: AST -> Html
 translateEach (Text x)   = string x
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
-translateEach (Col xs)   = do
-    preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
-    table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style "width:100%;max-width:300px;" $
+translateEach (Col xs w gl gr pos) = do
+    preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
+    table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style (toValue ("width:100%;max-width:" ++ (show w) ++ "px;")) $
         tr $
-            td ! class_ "col-first-td" ! A.style "padding-left:20px;padding-right:20px;" $
+            td ! class_ (toValue (colClass pos)) ! A.style (toValue ("padding-left:" ++ (show gl) ++ "px;padding-right:" ++ (show gr) ++ "px;")) $
                 forM_ xs translateEach
-    preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"300\"><![endif]-->" :: String)
+    preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
+    where
+        colClass First  = "col-first-td" :: String
+        colClass Middle = "col-td"       :: String
+        colClass Last   = "col-last-td"  :: String
 translateEach (Row xs)   =
     table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
         tr $

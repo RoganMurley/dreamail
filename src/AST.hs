@@ -1,7 +1,13 @@
 module AST where
 
-data AST = Row [AST] | Col [AST] | Div [AST] | Img Src Alt | Text String
+data AST = Row [AST] | Col [AST] Width GutterL GutterR Position | Div [AST] | Img Src Alt | Text String
     deriving (Show)
 
-type Src   = String
 type Alt   = String
+type Src   = String
+type Width = Int
+type GutterL = Int
+type GutterR = Int
+
+data Position = First | Middle | Last
+    deriving (Show)
