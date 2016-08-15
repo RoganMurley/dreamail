@@ -23,9 +23,11 @@ iParse aParser source_name input =
 
 whole = block row <* eof
 
-line = (text <|> img <|> div_p) <* spaces
+line = (text <|> h1 <|> img <|> div_p) <* spaces
 
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
+
+h1 = H1 <$> (string "h1" *> onlySpaces *> stringLiteral)
 
 img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> attr "alt")
 

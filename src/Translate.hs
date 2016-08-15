@@ -50,6 +50,7 @@ translate xs = template $ forM_ xs translateEach
 
 translateEach :: AST -> Html
 translateEach (Text x)   = string x
+translateEach (H1 x)     = h1 (string x)
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
 translateEach (Col xs w gl gr pos) = do
