@@ -1,6 +1,6 @@
 module AST where
 
-data AST = Row [AST] | Col [AST] Width GutterL GutterR Position | Div [AST] | Img Src Alt | H1 String | Text String
+data AST = Div [AST] | Img Src Alt | H1 String | Text String
     deriving (Show)
 
 type Alt   = String
@@ -10,4 +10,13 @@ type GutterL = Int
 type GutterR = Int
 
 data Position = First | Middle | Last
+    deriving (Show)
+
+data Root = Root [Row]
+    deriving (Show)
+
+data Row = Row [Col]
+    deriving (Show)
+
+data Col = Col [AST] Width GutterL GutterR Position
     deriving (Show)

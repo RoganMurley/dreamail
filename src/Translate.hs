@@ -45,31 +45,34 @@ template b = docTypeHtml $ do
             \}"
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
-translate :: [AST] -> Html
-translate xs = template $ forM_ xs translateEach
+translate :: Root -> Html
+translate (Root xs) = template $ forM_ xs translateRow
+
+translateRow :: Row -> Html
+translateRow (Row xs) =
+    table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
+        tr $
+            td $
+                forM_ xs translateCol
+
+translateCol :: Col -> Html
+translateCol (Col xs w gl gr pos) = do
+    preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
+    table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style (toValue ("width:100%;max-width:" ++ (show w) ++ "px;")) $
+        tr $
+            td ! class_ (colClass pos) ! A.style (toValue ("padding-left:" ++ (show gl) ++ "px;padding-right:" ++ (show gr) ++ "px;")) $
+                forM_ xs translateEach
+    preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
+    where
+        colClass First  = "col-first-td"
+        colClass Middle = "col-td"
+        colClass Last   = "col-last-td"
 
 translateEach :: AST -> Html
 translateEach (Text x)   = string x
 translateEach (H1 x)     = h1 (string x)
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
-translateEach (Col xs w gl gr pos) = do
-    preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
-    table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style (toValue ("width:100%;max-width:" ++ (show w) ++ "px;")) $
-        tr $
-            td ! class_ (toValue (colClass pos)) ! A.style (toValue ("padding-left:" ++ (show gl) ++ "px;padding-right:" ++ (show gr) ++ "px;")) $
-                forM_ xs translateEach
-    preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
-    where
-        colClass First  = "col-first-td" :: String
-        colClass Middle = "col-td"       :: String
-        colClass Last   = "col-last-td"  :: String
-translateEach (Row xs)   =
-    table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
-        tr $
-            td $
-                forM_ xs translateEach
-
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""
