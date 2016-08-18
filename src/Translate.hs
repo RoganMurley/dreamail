@@ -73,6 +73,7 @@ translateEach (Text x)   = string x
 translateEach (H1 x)     = h1 (string x)
 translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
 translateEach (Div xs)   = H.div $ forM_ xs translateEach
+translateEach (A u xs) = H.a ! href (toValue u) $ forM_ xs translateEach
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""

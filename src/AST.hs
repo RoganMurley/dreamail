@@ -1,6 +1,6 @@
 module AST where
 
-data AST = Div [AST] | Img Src Alt | H1 String | Text String
+data AST = Div [AST] | Img Src Alt | H1 String | Text String | A String [AST]
     deriving (Show)
 
 type Alt   = String

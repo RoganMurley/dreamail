@@ -23,13 +23,15 @@ iParse aParser source_name input =
 
 whole = block row <* eof
 
-line = (text <|> h1 <|> img <|> div_p) <* spaces
+line = (text <|> h1 <|> img <|> div_p <|> link) <* spaces
 
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
 
 h1 = H1 <$> (string "h1" *> onlySpaces *> stringLiteral)
 
 img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> attr "alt")
+
+link  = withBlock A (string "a" *> onlySpaces *> (attr "href") <* spaces) line
 
 div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
 

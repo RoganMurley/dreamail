@@ -17,8 +17,9 @@ semanticRow (T.Row xs) = A.Row $ fmlMap
 semanticEach :: T.Token -> A.AST
 semanticEach (T.Text x)   = A.Text x
 semanticEach (T.H1 x)     = A.H1 x
-semanticEach (T.Img  s a) = A.Img  s a
-semanticEach (T.Div  xs)  = A.Div  (semanticEach <$> xs)
+semanticEach (T.Img  s a) = A.Img s a
+semanticEach (T.Div  xs)  = A.Div (semanticEach <$> xs)
+semanticEach (T.A u xs)   = A.A u (semanticEach <$> xs)
 
 semanticCol :: (Int, Int) -> A.Width -> A.Position -> T.Token -> A.Col
 semanticCol (gl, gr) l p (T.Col xs) = A.Col (semanticEach <$> xs) (quot 600 l) gl gr p
