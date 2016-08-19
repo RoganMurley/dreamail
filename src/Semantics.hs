@@ -16,9 +16,10 @@ semanticRow (T.Row xs) = A.Row $ fmlMap
 
 semanticEach :: T.Token -> A.AST
 semanticEach (T.Text x)      = A.Text x
-semanticEach (T.Img  s a)    = A.Img s a
-semanticEach (T.Div  xs)     = A.Div (semanticEach <$> xs)
+semanticEach (T.Img s a)     = A.Img s a
+semanticEach (T.Div xs)      = A.Div (semanticEach <$> xs)
 semanticEach (T.A u xs)      = A.A u (semanticEach <$> xs)
+semanticEach (T.Comment s)   = A.Comment s
 semanticEach (T.Heading l x) = A.Heading (toLevel l) x
     where
     toLevel :: String -> A.HeadingLevel

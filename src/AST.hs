@@ -1,11 +1,12 @@
 module AST where
 
-data AST = Div [AST] | Img Src Alt | Heading HeadingLevel String | Text String | A String [AST]
+data AST = Div [AST] | Img Src Alt | Heading HeadingLevel String | Text String | A String [AST] | Comment String
     deriving (Show)
 
-type Alt   = String
-type Src   = String
-type Width = Int
+type Alt     = String
+type Src     = String
+type Href    = String
+type Width   = Int
 type GutterL = Int
 type GutterR = Int
 

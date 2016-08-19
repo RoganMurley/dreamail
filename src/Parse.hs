@@ -24,7 +24,7 @@ whole :: IParser [Token]
 whole = block row <* eof
 
 line :: IParser Token
-line = (text <|> img <|> div_p <|> link <|> heading) <* spaces
+line = (text <|> img <|> div_p <|> link <|> heading <|> comment) <* spaces
 
 text :: IParser Token
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
@@ -43,6 +43,9 @@ link  = withBlock A (string "a" *> onlySpaces *> (attr "href") <* spaces) line
 
 div_p :: IParser Token
 div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
+
+comment :: IParser Token
+comment = Comment <$> (string "//" *> manyTill anyChar newline)
 
 col :: IParser Token
 col   = withBlock (flip (const . Col)) (string "col" <* spaces) line

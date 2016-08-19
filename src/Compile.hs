@@ -73,6 +73,7 @@ compileEach (Text x)       = string x
 compileEach (Img s a)      = img ! src (toValue s) ! alt (toValue a)
 compileEach (Div xs)       = H.div $ forM_ xs compileEach
 compileEach (A u xs)       = H.a ! href (toValue u) $ forM_ xs compileEach
+compileEach (Comment s)    = string ""
 compileEach (Heading H1 x) = h1 (string x)
 compileEach (Heading H2 x) = h2 (string x)
 compileEach (Heading H3 x) = h3 (string x)
