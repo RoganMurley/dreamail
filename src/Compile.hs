@@ -46,7 +46,7 @@ template b = docTypeHtml $ do
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
 compile :: Root -> Html
-compile (Root xs) = template $ forM_ xs compileRow
+compile (Root xs ()) = template $ forM_ xs compileRow
 
 compileRow :: Row -> Html
 compileRow (Row xs) =

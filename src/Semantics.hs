@@ -5,7 +5,7 @@ import Tokens as T
 
 
 semantic :: [T.Token] -> A.Root
-semantic xs = A.Root (semanticRow <$> xs)
+semantic xs = A.Root (semanticRow <$> xs) ()
 
 semanticRow :: T.Token -> A.Row
 semanticRow (T.Row xs) = A.Row $ fmlMap

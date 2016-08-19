@@ -14,7 +14,7 @@ type Width   = Int
 data Position = First | Middle | Last
     deriving (Show)
 
-data Root = Root [Row]
+data Root = Root [Row] ()
     deriving (Show)
 
 data Row = Row [Col]
