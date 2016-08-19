@@ -1,8 +1,9 @@
 module Tokens where
 
-data Token =  Row [Token] | Col [Token] | Div [Token] | Img Src Alt | Heading String String | H2 String | Text String | A Href [Token] | Comment String
+data Token =  Row [Token] | Col [Token] | Div Class [Token] | Img Src Alt Class | Heading String Class String | Text String | A Href Class [Token] | Comment String
    deriving (Show)
 
 type Alt   = String
-type Src   = String
+type Class = String
 type Href  = String
+type Src   = String

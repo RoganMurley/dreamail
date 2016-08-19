@@ -1,14 +1,15 @@
 module AST where
 
-data AST = Div [AST] | Img Src Alt | Heading HeadingLevel String | Text String | A String [AST] | Comment String
+data AST = Div Class [AST] | Img Src Alt Class | Heading HeadingLevel Class String | Text String | A Href Class [AST] | Comment String
     deriving (Show)
 
 type Alt     = String
-type Src     = String
-type Href    = String
-type Width   = Int
+type Class   = String
 type GutterL = Int
 type GutterR = Int
+type Href    = String
+type Src     = String
+type Width   = Int
 
 data Position = First | Middle | Last
     deriving (Show)

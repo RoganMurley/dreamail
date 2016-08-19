@@ -69,17 +69,17 @@ compileCol (Col xs w gl gr pos) = do
         colClass Last   = "col-last-td"
 
 compileEach :: AST -> Html
-compileEach (Text x)       = string x
-compileEach (Img s a)      = img ! src (toValue s) ! alt (toValue a)
-compileEach (Div xs)       = H.div $ forM_ xs compileEach
-compileEach (A u xs)       = H.a ! href (toValue u) $ forM_ xs compileEach
-compileEach (Comment s)    = string ""
-compileEach (Heading H1 x) = h1 (string x)
-compileEach (Heading H2 x) = h2 (string x)
-compileEach (Heading H3 x) = h3 (string x)
-compileEach (Heading H4 x) = h4 (string x)
-compileEach (Heading H5 x) = h5 (string x)
-compileEach (Heading H6 x) = h6 (string x)
+compileEach (Text x)         = string x
+compileEach (Img s a c)      = img ! src (toValue s) ! alt (toValue a) ! class_ (toValue c)
+compileEach (Div c xs)       = H.div ! class_ (toValue c) $ forM_ xs compileEach
+compileEach (A u c xs)       = H.a ! href (toValue u) ! class_ (toValue c) $ forM_ xs compileEach
+compileEach (Comment s)      = string ""
+compileEach (Heading H1 c x) = h1 ! class_ (toValue c) $ string x
+compileEach (Heading H2 c x) = h2 ! class_ (toValue c) $ string x
+compileEach (Heading H3 c x) = h3 ! class_ (toValue c) $ string x
+compileEach (Heading H4 c x) = h4 ! class_ (toValue c) $ string x
+compileEach (Heading H5 c x) = h5 ! class_ (toValue c) $ string x
+compileEach (Heading H6 c x) = h6 ! class_ (toValue c) $ string x
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""

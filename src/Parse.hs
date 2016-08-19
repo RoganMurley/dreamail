@@ -27,34 +27,57 @@ text :: IParser Token
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
 
 heading :: IParser Token
-heading = Heading <$> ((string "h") *> levels) <*> (onlySpaces *> stringLiteral)
+heading = Heading <$>
+    (string "h" *> levels) <*>
+    (onlySpaces *> optClass) <*>
+    (onlySpaces *> stringLiteral)
     where
     levels :: IParser String
     levels = string "1" <|> string "2" <|> string "3" <|> string "4" <|> string "5" <|> string "6"
 
 img :: IParser Token
-img  = Img <$> (string "img" *> onlySpaces *> attr "src") <*> (onlySpaces *> attr "alt")
+img = Img <$>
+    (string "img" *> onlySpaces *> attr "src") <*>
+    (onlySpaces *> attr "alt") <*>
+    (onlySpaces *> optClass)
 
 link :: IParser Token
-link  = withBlock A (string "a" *> onlySpaces *> (attr "href") <* spaces) line
+link = withBlock tupA
+    (mkTup <$> (string "a" *> onlySpaces *> attr "href") <*> (onlySpaces *> optClass <* spaces))
+    line
+    where
+    mkTup :: a -> b -> (a, b)
+    mkTup a b = (a, b)
+    tupA :: (String, String) -> [Token] -> Token
+    tupA (a, b) = A a b
 
 div_p :: IParser Token
-div_p = withBlock (flip (const . Div)) (string "div" <* spaces) line
+div_p = withBlock Div
+    (string "div" *> onlySpaces *> optClass <* spaces)
+    line
 
 comment :: IParser Token
-comment = Comment <$> (string "//" *> manyTill anyChar newline)
+comment = Comment <$>
+    (string "//" *> manyTill anyChar newline)
 
 col :: IParser Token
-col   = withBlock (flip (const . Col)) (string "col" <* spaces) line
+col = withBlock
+    (flip (const . Col)) (string "col" <* spaces)
+    line
 
 row :: IParser Token
-row   = withBlock (flip (const . Row)) (string "row" <* spaces) col
+row = withBlock
+    (flip (const . Row)) (string "row" <* spaces)
+    col
 
 attr :: String -> IParser String
-attr name = string "." *> onlySpaces *> (string name) *> onlySpaces *> stringLiteral
+attr name = string "." *> onlySpaces *> string name *> onlySpaces *> stringLiteral
+
+optClass :: IParser String
+optClass = attr "class" <|> pure ""
 
 stringLiteral :: IParser String
-stringLiteral = (string "\"") *> (manyTill anyChar (char '\"'))
+stringLiteral = string "\"" *> manyTill anyChar (char '\"')
 
 onlySpaces :: IParser String
 onlySpaces = many space
