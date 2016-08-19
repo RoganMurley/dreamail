@@ -69,11 +69,16 @@ translateCol (Col xs w gl gr pos) = do
         colClass Last   = "col-last-td"
 
 translateEach :: AST -> Html
-translateEach (Text x)   = string x
-translateEach (H1 x)     = h1 (string x)
-translateEach (Img s a)  = img ! src (toValue s) ! alt (toValue a)
-translateEach (Div xs)   = H.div $ forM_ xs translateEach
-translateEach (A u xs) = H.a ! href (toValue u) $ forM_ xs translateEach
+translateEach (Text x)       = string x
+translateEach (Img s a)      = img ! src (toValue s) ! alt (toValue a)
+translateEach (Div xs)       = H.div $ forM_ xs translateEach
+translateEach (A u xs)       = H.a ! href (toValue u) $ forM_ xs translateEach
+translateEach (Heading H1 x) = h1 (string x)
+translateEach (Heading H2 x) = h2 (string x)
+translateEach (Heading H3 x) = h3 (string x)
+translateEach (Heading H4 x) = h4 (string x)
+translateEach (Heading H5 x) = h5 (string x)
+translateEach (Heading H6 x) = h6 (string x)
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""
