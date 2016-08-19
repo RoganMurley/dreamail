@@ -20,9 +20,11 @@ library
                        , Parse
                        , Semantics
                        , Tokens
+                       , Utils
   build-depends:       base >= 4.7 && < 5
                        , blaze-html
                        , blaze-markup
+                       , containers
                        , indents
                        , mtl
                        , parsec

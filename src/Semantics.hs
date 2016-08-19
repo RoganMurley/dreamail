@@ -3,9 +3,11 @@ module Semantics where
 import AST as A
 import Tokens as T
 
+import Utils (fmlMap)
+
 
 semantic :: [T.Token] -> A.Root
-semantic xs = A.Root (semanticRow <$> xs) ()
+semantic xs = A.Root (semanticRow <$> xs) (A.styleBase)
 
 semanticRow :: T.Token -> A.Row
 semanticRow (T.Row xs) = A.Row $ fmlMap
@@ -35,10 +37,3 @@ semanticCol (gl, gr) l p (T.Col xs) = A.Col (semanticEach <$> xs) (quot 600 l) g
 
 gutter :: Int
 gutter = 20
-
--- Map with different functions for first, middle and last elements.
-fmlMap :: (a -> b) -> (a -> b) -> (a -> b) -> [a] -> [b]
-fmlMap f m l [] = []
-fmlMap f m l [a] = [f a]
-fmlMap f m l [a, b] = [f a, l b]
-fmlMap f m l xs = [f (head xs)] ++ (m <$> (init (tail xs))) ++ [l (last xs)]

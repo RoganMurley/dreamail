@@ -3,6 +3,7 @@
 module Compile where
 
 import Control.Monad
+import Data.Maybe
 
 import Text.Blaze.Html4.Transitional as H
 import Text.Blaze.Html4.Transitional.Attributes as A
@@ -46,7 +47,7 @@ template b = docTypeHtml $ do
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
 compile :: Root -> Html
-compile (Root xs ()) = template $ forM_ xs compileRow
+compile (Root xs _) = template $ forM_ xs compileRow
 
 compileRow :: Row -> Html
 compileRow (Row xs) =
@@ -70,7 +71,7 @@ compileCol (Col xs w gl gr pos) = do
 
 compileEach :: AST -> Html
 compileEach (Text x)         = string x
-compileEach (Img s a c)      = img ! src (toValue s) ! alt (toValue a) ! class_ (toValue c)
+compileEach (Img s a c)      = img ! src (toValue s) ! alt (toValue a) ! class_ (toValue c) ! inlineStyle styleBase c
 compileEach (Div c xs)       = H.div ! class_ (toValue c) $ forM_ xs compileEach
 compileEach (A u c xs)       = H.a ! href (toValue u) ! class_ (toValue c) $ forM_ xs compileEach
 compileEach (Comment s)      = string ""
@@ -92,3 +93,10 @@ marginwidth = attribute "marginwidth" " marginwidth=\""
 
 marginheight :: AttributeValue -> Attribute
 marginheight = attribute "marginheight" " marginheight=\""
+
+inlineStyle :: Stylesheet -> Class -> Attribute
+inlineStyle s c = A.style $ toValue $ maybeToEmptyString $ Nothing
+    where
+    maybeToEmptyString :: Maybe String -> String
+    maybeToEmptyString (Just s)  = s
+    maybeToEmptyString Nothing = ""
