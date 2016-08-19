@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Translate where
+module Compile where
 
 import Control.Monad
 
@@ -45,40 +45,40 @@ template b = docTypeHtml $ do
             \}"
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
-translate :: Root -> Html
-translate (Root xs) = template $ forM_ xs translateRow
+compile :: Root -> Html
+compile (Root xs) = template $ forM_ xs compileRow
 
-translateRow :: Row -> Html
-translateRow (Row xs) =
+compileRow :: Row -> Html
+compileRow (Row xs) =
     table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
         tr $
             td $
-                forM_ xs translateCol
+                forM_ xs compileCol
 
-translateCol :: Col -> Html
-translateCol (Col xs w gl gr pos) = do
+compileCol :: Col -> Html
+compileCol (Col xs w gl gr pos) = do
     preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
     table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style (toValue ("width:100%;max-width:" ++ (show w) ++ "px;")) $
         tr $
             td ! class_ (colClass pos) ! A.style (toValue ("padding-left:" ++ (show gl) ++ "px;padding-right:" ++ (show gr) ++ "px;")) $
-                forM_ xs translateEach
+                forM_ xs compileEach
     preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
     where
         colClass First  = "col-first-td"
         colClass Middle = "col-td"
         colClass Last   = "col-last-td"
 
-translateEach :: AST -> Html
-translateEach (Text x)       = string x
-translateEach (Img s a)      = img ! src (toValue s) ! alt (toValue a)
-translateEach (Div xs)       = H.div $ forM_ xs translateEach
-translateEach (A u xs)       = H.a ! href (toValue u) $ forM_ xs translateEach
-translateEach (Heading H1 x) = h1 (string x)
-translateEach (Heading H2 x) = h2 (string x)
-translateEach (Heading H3 x) = h3 (string x)
-translateEach (Heading H4 x) = h4 (string x)
-translateEach (Heading H5 x) = h5 (string x)
-translateEach (Heading H6 x) = h6 (string x)
+compileEach :: AST -> Html
+compileEach (Text x)       = string x
+compileEach (Img s a)      = img ! src (toValue s) ! alt (toValue a)
+compileEach (Div xs)       = H.div $ forM_ xs compileEach
+compileEach (A u xs)       = H.a ! href (toValue u) $ forM_ xs compileEach
+compileEach (Heading H1 x) = h1 (string x)
+compileEach (Heading H2 x) = h2 (string x)
+compileEach (Heading H3 x) = h3 (string x)
+compileEach (Heading H4 x) = h4 (string x)
+compileEach (Heading H5 x) = h5 (string x)
+compileEach (Heading H6 x) = h6 (string x)
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""

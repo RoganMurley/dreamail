@@ -16,10 +16,10 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:       AST
+                       , Compile
                        , Parse
                        , Semantics
                        , Tokens
-                       , Translate
   build-depends:       base >= 4.7 && < 5
                        , blaze-html
                        , blaze-markup
