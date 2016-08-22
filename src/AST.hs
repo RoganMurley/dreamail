@@ -37,7 +37,7 @@ data Style = TextColor HexColor
     deriving (Show)
 
 styleBase :: Stylesheet
-styleBase = Map.insert "header" [TextColor "#123fff"] Map.empty
+styleBase = Map.empty
 
 getStyles :: Class -> Stylesheet -> [Style]
 getStyles c s = maybeToList (Map.lookup c s)

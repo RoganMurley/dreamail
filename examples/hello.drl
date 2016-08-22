@@ -1,12 +1,17 @@
-row
-    col
-        h1 . class "header" "Lorem Ipsum"
-row
-    col
-        h2 "Dolor Sit"
-        text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In scelerisque est quis sagittis accumsan. Mauris purus ante, pellentesque in posuere a, malesuada sed leo. In luctus sem nec libero interdum accumsan. Quisque ultricies semper mi, ut egestas lorem fringilla sed. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer laoreet id tellus sed pellentesque. Aenean odio leo, mollis in tellus vitae, mattis scelerisque felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam scelerisque, felis sit amet pretium aliquam, sapien velit porta enim, sed feugiat sem nulla ut orci. Curabitur laoreet pharetra quam, non commodo tortor lacinia a. Integer non scelerisque velit. In non enim ac felis euismod tempus."
-row
-    col
-        img . src "http://placehold.it/200x200" . alt "Duis"
-    col
-        text "Maecenas non vulputate tortor, eget gravida lorem. Donec id lectus sapien. Aliquam commodo lacus mi. Sed dapibus tellus lectus, vehicula malesuada purus laoreet sit amet. Integer malesuada hendrerit augue, id pharetra purus pellentesque a. Integer egestas ac velit vitae interdum. Sed purus neque, bibendum sed aliquam non, ullamcorper a urna. Ut hendrerit est consequat, pretium mauris ac, tincidunt nisi."
+style
+    color #ffffff
+    color red
+
+body
+    row
+        col
+            h1 . class "header" "Lorem Ipsum"
+    row
+        col
+            h2 "Dolor Sit"
+            text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In scelerisque est quis sagittis accumsan. Mauris purus ante, pellentesque in posuere a, malesuada sed leo. In luctus sem nec libero interdum accumsan. Quisque ultricies semper mi, ut egestas lorem fringilla sed. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer laoreet id tellus sed pellentesque. Aenean odio leo, mollis in tellus vitae, mattis scelerisque felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam scelerisque, felis sit amet pretium aliquam, sapien velit porta enim, sed feugiat sem nulla ut orci. Curabitur laoreet pharetra quam, non commodo tortor lacinia a. Integer non scelerisque velit. In non enim ac felis euismod tempus."
+    row
+        col
+            img . src "http://placehold.it/200x200" . alt "Duis"
+        col
+            text "Maecenas non vulputate tortor, eget gravida lorem. Donec id lectus sapien. Aliquam commodo lacus mi. Sed dapibus tellus lectus, vehicula malesuada purus laoreet sit amet. Integer malesuada hendrerit augue, id pharetra purus pellentesque a. Integer egestas ac velit vitae interdum. Sed purus neque, bibendum sed aliquam non, ullamcorper a urna. Ut hendrerit est consequat, pretium mauris ac, tincidunt nisi."
