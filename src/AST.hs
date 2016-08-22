@@ -1,6 +1,6 @@
 module AST where
 
-import Data.Map as Map
+import Data.Map.Strict as Map
 
 
 -- Body AST
@@ -31,7 +31,17 @@ data HeadingLevel = H1 | H2 | H3 | H4 | H5 | H6
     deriving (Show)
 
 -- Style AST.
-type Stylesheet = Map.Map Class String
+type HexColor = String
+type Stylesheet = Map.Map Class [Style]
+data Style = TextColor HexColor
+    deriving (Show)
 
 styleBase :: Stylesheet
-styleBase = Map.empty
+styleBase = Map.insert "header" [TextColor "#123fff"] Map.empty
+
+getStyles :: Class -> Stylesheet -> [Style]
+getStyles c s = maybeToList (Map.lookup c s)
+    where
+    maybeToList :: Maybe [a] -> [a]
+    maybeToList (Just xs) = xs
+    maybeToList Nothing = []

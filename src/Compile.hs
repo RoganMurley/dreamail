@@ -47,40 +47,40 @@ template b = docTypeHtml $ do
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
 compile :: Root -> Html
-compile (Root xs _) = template $ forM_ xs compileRow
+compile (Root xs s) = template $ forM_ xs (compileRow s)
 
-compileRow :: Row -> Html
-compileRow (Row xs) =
+compileRow :: Stylesheet -> Row -> Html
+compileRow s (Row xs) =
     table ! width "600" ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "center" $ -- TODO: ADD OUTLOOK WRAPPER TABLE!!!
         tr $
             td $
-                forM_ xs compileCol
+                forM_ xs (compileCol s)
 
-compileCol :: Col -> Html
-compileCol (Col xs w gl gr pos) = do
+compileCol :: Stylesheet -> Col -> Html
+compileCol s (Col xs w gl gr pos) = do
     preEscapedToHtml ("<!--[if mso]><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
     table ! border "0" ! cellpadding "0" ! cellspacing "0" ! align "left" ! class_ "col" ! A.style (toValue ("width:100%;max-width:" ++ (show w) ++ "px;")) $
         tr $
             td ! class_ (colClass pos) ! A.style (toValue ("padding-left:" ++ (show gl) ++ "px;padding-right:" ++ (show gr) ++ "px;")) $
-                forM_ xs compileEach
+                forM_ xs (compileEach s)
     preEscapedToHtml ("<!--[if mso]></td><td valign=\"top\" width=\"" ++ (show w) ++ "\"><![endif]-->" :: String)
     where
         colClass First  = "col-first-td"
         colClass Middle = "col-td"
         colClass Last   = "col-last-td"
 
-compileEach :: AST -> Html
-compileEach (Text x)         = string x
-compileEach (Img s a c)      = img ! src (toValue s) ! alt (toValue a) ! class_ (toValue c) ! inlineStyle styleBase c
-compileEach (Div c xs)       = H.div ! class_ (toValue c) $ forM_ xs compileEach
-compileEach (A u c xs)       = H.a ! href (toValue u) ! class_ (toValue c) $ forM_ xs compileEach
-compileEach (Comment s)      = string ""
-compileEach (Heading H1 c x) = h1 ! class_ (toValue c) $ string x
-compileEach (Heading H2 c x) = h2 ! class_ (toValue c) $ string x
-compileEach (Heading H3 c x) = h3 ! class_ (toValue c) $ string x
-compileEach (Heading H4 c x) = h4 ! class_ (toValue c) $ string x
-compileEach (Heading H5 c x) = h5 ! class_ (toValue c) $ string x
-compileEach (Heading H6 c x) = h6 ! class_ (toValue c) $ string x
+compileEach :: Stylesheet -> AST -> Html
+compileEach s (Text x)         = string x
+compileEach s (Img sr a c)     = img ! src (toValue sr) ! alt (toValue a) ! class_ (toValue c) ! inlineStyle s c
+compileEach s (Div c xs)       = H.div ! class_ (toValue c) ! inlineStyle s c $ forM_ xs (compileEach s)
+compileEach s (A u c xs)       = H.a ! href (toValue u) ! class_ (toValue c) ! inlineStyle s c $ forM_ xs (compileEach s)
+compileEach s (Comment _)      = string ""
+compileEach s (Heading H1 c x) = h1 ! class_ (toValue c) ! inlineStyle s c $ string x
+compileEach s (Heading H2 c x) = h2 ! class_ (toValue c) ! inlineStyle s c $ string x
+compileEach s (Heading H3 c x) = h3 ! class_ (toValue c) ! inlineStyle s c $ string x
+compileEach s (Heading H4 c x) = h4 ! class_ (toValue c) ! inlineStyle s c $ string x
+compileEach s (Heading H5 c x) = h5 ! class_ (toValue c) ! inlineStyle s c $ string x
+compileEach s (Heading H6 c x) = h6 ! class_ (toValue c) ! inlineStyle s c $ string x
 
 leftmargin :: AttributeValue -> Attribute
 leftmargin = attribute "leftmargin" " leftmargin=\""
@@ -94,9 +94,12 @@ marginwidth = attribute "marginwidth" " marginwidth=\""
 marginheight :: AttributeValue -> Attribute
 marginheight = attribute "marginheight" " marginheight=\""
 
+-- Style stuff!
 inlineStyle :: Stylesheet -> Class -> Attribute
-inlineStyle s c = A.style $ toValue $ maybeToEmptyString $ Nothing
+inlineStyle s c = A.style $ toValue $ compileStyles $ getStyles c s
     where
-    maybeToEmptyString :: Maybe String -> String
-    maybeToEmptyString (Just s)  = s
-    maybeToEmptyString Nothing = ""
+    compileStyles :: [Style] -> String
+    compileStyles = concatMap compileStyle
+
+compileStyle :: Style -> String
+compileStyle (TextColor c) = "color:" ++ c ++ ";"
