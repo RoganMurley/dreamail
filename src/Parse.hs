@@ -30,13 +30,19 @@ classStyle = withBlock
     styleRule
 
 styleRule :: IParser Style
-styleRule = (textCol <|> bgCol) <* spaces
+styleRule = (textCol <|> bgCol <|> width <|> height) <* spaces
 
 textCol :: IParser Style
 textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol)
 
 bgCol :: IParser Style
 bgCol = BackgroundColor <$> (string "background-color" *> onlySpaces *> hexCol)
+
+width :: IParser Style
+width = Width <$> (string "width" *> onlySpaces *> manyTill anyChar newline)
+
+height :: IParser Style
+height = Height <$> (string "height" *> onlySpaces *> manyTill anyChar newline)
 
 hexCol :: IParser String
 hexCol = string "#" *> count 6 hexDigit <* newline

@@ -43,6 +43,8 @@ type Stylesheet = Map.Map Class [Style]
 data Style =
       TextColor HexColor
     | BackgroundColor HexColor
+    | Width String
+    | Height String
     deriving (Show)
 
 type HexColor = String

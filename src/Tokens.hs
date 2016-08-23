@@ -8,6 +8,8 @@ data StyleBlock = ClassBlock Class [Style]
 data Style =
       TextColor String
     | BackgroundColor String
+    | Width String
+    | Height String
     deriving (Show)
 
 data Body =
