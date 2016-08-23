@@ -30,7 +30,10 @@ classStyle = withBlock
     textCol
 
 textCol :: IParser StyleToken
-textCol = TextColor <$> (string "text-color" *> onlySpaces *> manyTill anyChar newline <* spaces)
+textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol <* spaces)
+    where
+    hexCol :: IParser String
+    hexCol = string "#" *> count 6 hexDigit <* newline
 
 body :: IParser [BodyToken]
 body = withBlock' (string "body" <* onlySpaces) row
