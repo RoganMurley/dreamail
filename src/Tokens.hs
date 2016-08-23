@@ -1,15 +1,23 @@
 module Tokens where
 
-data DocToken = DocToken [StyleRuleToken] [BodyToken]
+data Doc = Doc [StyleBlock] [Body]
 
-data StyleRuleToken = ClassRule Class [StyleToken]
+data StyleBlock = ClassBlock Class [Style]
     deriving (Show)
 
-data StyleToken = TextColor String
+data Style = TextColor String
     deriving (Show)
 
-data BodyToken =  Row [BodyToken] | Col [BodyToken] | Div Class [BodyToken] | Img Src Alt Class | Heading String Class String | Text String | A Href Class [BodyToken] | Comment String
-   deriving (Show)
+data Body =
+      Row [Body]
+    | Col [Body]
+    | Div Class [Body]
+    | Img Src Alt Class
+    | Heading String Class String
+    | Text String
+    | A Href Class [Body]
+    | Comment String
+    deriving (Show)
 
 type Alt   = String
 type Class = String

@@ -3,8 +3,29 @@ module AST where
 import Data.Map.Strict as Map
 
 
--- Body AST
-data AST = Div Class [AST] | Img Src Alt Class | Heading HeadingLevel Class String | Text String | A Href Class [AST] | Comment String
+data Doc = Doc Stylesheet [Row]
+    deriving (Show)
+
+-- Body.
+data Body =
+      Div Class [Body]
+    | Img Src Alt Class
+    | Heading HeadingLevel Class String
+    | Text String
+    | A Href Class [Body]
+    | Comment String
+    deriving (Show)
+
+data Row = Row [Col]
+    deriving (Show)
+
+data Col = Col [Body] Width GutterL GutterR Position
+    deriving (Show)
+
+data Position = First | Middle | Last
+    deriving (Show)
+
+data HeadingLevel = H1 | H2 | H3 | H4 | H5 | H6
     deriving (Show)
 
 type Alt     = String
@@ -15,33 +36,17 @@ type Href    = String
 type Src     = String
 type Width   = Int
 
-data Position = First | Middle | Last
-    deriving (Show)
 
-data Root = Root [Row] Stylesheet
-    deriving (Show)
-
-data Row = Row [Col]
-    deriving (Show)
-
-data Col = Col [AST] Width GutterL GutterR Position
-    deriving (Show)
-
-data HeadingLevel = H1 | H2 | H3 | H4 | H5 | H6
-    deriving (Show)
-
--- Style AST.
-type HexColor = String
+-- Stylesheet.
 type Stylesheet = Map.Map Class [Style]
+
 data Style = TextColor HexColor
     deriving (Show)
+
+type HexColor = String
 
 styleBase :: Stylesheet
 styleBase = Map.empty
 
 getStyles :: Class -> Stylesheet -> [Style]
-getStyles c s = maybeToList (Map.lookup c s)
-    where
-    maybeToList :: Maybe [a] -> [a]
-    maybeToList (Just xs) = xs
-    maybeToList Nothing = []
+getStyles c s = concat (Map.lookup c s)

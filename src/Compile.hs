@@ -3,7 +3,6 @@
 module Compile where
 
 import Control.Monad
-import Data.Maybe
 
 import Text.Blaze.Html4.Transitional as H
 import Text.Blaze.Html4.Transitional.Attributes as A
@@ -46,8 +45,8 @@ template b = docTypeHtml $ do
             \}"
     body ! bgcolor "#ffffff" ! leftmargin "0" ! topmargin "0" ! marginwidth "0" ! marginheight "0" $ b
 
-compile :: Root -> Html
-compile (Root xs s) = template $ forM_ xs (compileRow s)
+compile :: Doc -> Html
+compile (Doc s xs) = template $ forM_ xs (compileRow s)
 
 compileRow :: Stylesheet -> Row -> Html
 compileRow s (Row xs) =
@@ -69,7 +68,7 @@ compileCol s (Col xs w gl gr pos) = do
         colClass Middle = "col-td"
         colClass Last   = "col-last-td"
 
-compileEach :: Stylesheet -> AST -> Html
+compileEach :: Stylesheet -> Body -> Html
 compileEach s (Text x)         = string x
 compileEach s (Img sr a c)     = img ! src (toValue sr) ! alt (toValue a) ! class_ (toValue c) ! inlineStyle s c
 compileEach s (Div c xs)       = H.div ! class_ (toValue c) ! inlineStyle s c $ forM_ xs (compileEach s)

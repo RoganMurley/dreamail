@@ -17,34 +17,34 @@ iParse :: IParser a -> SourceName -> String -> Either ParseError a
 iParse aParser source_name input =
     runIndent source_name $ runParserT aParser () source_name input
 
-doc :: IParser DocToken
-doc = DocToken <$> style <*> body <* eof
+doc :: IParser Doc
+doc = Doc <$> style <*> body <* eof
 
-style :: IParser [StyleRuleToken]
+style :: IParser [StyleBlock]
 style = (withBlock' (string "style" <* onlySpaces) classStyle) <|> (pure [])
 
-classStyle :: IParser StyleRuleToken
+classStyle :: IParser StyleBlock
 classStyle = withBlock
-    ClassRule
+    ClassBlock
     (string "." *> manyTill anyChar newline <* onlySpaces)
     textCol
 
-textCol :: IParser StyleToken
+textCol :: IParser Style
 textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol <* spaces)
     where
     hexCol :: IParser String
     hexCol = string "#" *> count 6 hexDigit <* newline
 
-body :: IParser [BodyToken]
+body :: IParser [Body]
 body = withBlock' (string "body" <* onlySpaces) row
 
-line :: IParser BodyToken
+line :: IParser Body
 line = (text <|> img <|> div_p <|> link <|> heading <|> comment) <* spaces
 
-text :: IParser BodyToken
+text :: IParser Body
 text = Text <$> (string "text" *> onlySpaces *> stringLiteral)
 
-heading :: IParser BodyToken
+heading :: IParser Body
 heading = Heading <$>
     (string "h" *> levels) <*>
     (onlySpaces *> optClass) <*>
@@ -53,37 +53,37 @@ heading = Heading <$>
     levels :: IParser String
     levels = string "1" <|> string "2" <|> string "3" <|> string "4" <|> string "5" <|> string "6"
 
-img :: IParser BodyToken
+img :: IParser Body
 img = Img <$>
     (string "img" *> onlySpaces *> attr "src") <*>
     (onlySpaces *> attr "alt") <*>
     (onlySpaces *> optClass)
 
-link :: IParser BodyToken
+link :: IParser Body
 link = withBlock tupA
     (mkTup <$> (string "a" *> onlySpaces *> attr "href") <*> (onlySpaces *> optClass <* spaces))
     line
     where
     mkTup :: a -> b -> (a, b)
     mkTup a b = (a, b)
-    tupA :: (String, String) -> [BodyToken] -> BodyToken
+    tupA :: (String, String) -> [Body] -> Body
     tupA (a, b) = A a b
 
-div_p :: IParser BodyToken
+div_p :: IParser Body
 div_p = withBlock Div
     (string "div" *> onlySpaces *> optClass <* spaces)
     line
 
-comment :: IParser BodyToken
+comment :: IParser Body
 comment = Comment <$>
     (string "//" *> manyTill anyChar newline)
 
-col :: IParser BodyToken
+col :: IParser Body
 col = withBlock
     (flip (const . Col)) (string "col" <* spaces)
     line
 
-row :: IParser BodyToken
+row :: IParser Body
 row = withBlock
     (flip (const . Row)) (string "row" <* spaces)
     col
