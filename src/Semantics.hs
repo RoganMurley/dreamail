@@ -1,7 +1,5 @@
 module Semantics where
 
-import Data.Map.Strict as Map
-
 import AST as A
 import Tokens as T
 
@@ -44,9 +42,7 @@ gutter = 20
 semanticStyleRule :: [StyleBlock] -> Stylesheet -> Stylesheet
 semanticStyleRule [] s = s
 semanticStyleRule ((ClassBlock c r):xs) s =
-    semanticStyleRule xs (Map.insert c (existingStyles ++ (semanticStyleEach <$> r)) s)
+    semanticStyleRule xs (addStyles c (semanticStyleEach <$> r) s)
     where
     semanticStyleEach :: T.Style -> A.Style
     semanticStyleEach (T.TextColor x) = A.TextColor x
-    existingStyles :: [A.Style]
-    existingStyles = getStyles c s

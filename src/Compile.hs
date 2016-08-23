@@ -93,7 +93,8 @@ marginwidth = attribute "marginwidth" " marginwidth=\""
 marginheight :: AttributeValue -> Attribute
 marginheight = attribute "marginheight" " marginheight=\""
 
--- Style stuff!
+
+-- Style.
 inlineStyle :: Stylesheet -> Class -> Attribute
 inlineStyle s c = A.style $ toValue $ compileStyles $ getStyles c s
     where

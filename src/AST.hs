@@ -50,3 +50,9 @@ styleBase = Map.empty
 
 getStyles :: Class -> Stylesheet -> [Style]
 getStyles c s = concat (Map.lookup c s)
+
+addStyles :: Class -> [Style] -> Stylesheet -> Stylesheet
+addStyles c xs s = Map.insert c styles s
+    where
+        styles :: [Style]
+        styles = (getStyles c s) ++ xs
