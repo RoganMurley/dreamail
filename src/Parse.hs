@@ -21,7 +21,7 @@ doc :: IParser DocToken
 doc = DocToken <$> style <*> body <* eof
 
 style :: IParser [StyleRuleToken]
-style = withBlock' (string "style" <* onlySpaces) classStyle
+style = (withBlock' (string "style" <* onlySpaces) classStyle) <|> (pure [])
 
 classStyle :: IParser StyleRuleToken
 classStyle = withBlock
