@@ -1,6 +1,9 @@
 module Tokens where
 
-data DocToken = DocToken [StyleToken] [BodyToken]
+data DocToken = DocToken [StyleRuleToken] [BodyToken]
+
+data StyleRuleToken = ClassRule Class [StyleToken]
+    deriving (Show)
 
 data StyleToken = TextColor String
     deriving (Show)

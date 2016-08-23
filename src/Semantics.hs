@@ -9,7 +9,7 @@ import Utils (fmlMap)
 
 
 semantic :: T.DocToken -> A.Root
-semantic (T.DocToken s xs) = A.Root (semanticRow <$> xs) (semanticStyle s)
+semantic (T.DocToken s xs) = A.Root (semanticRow <$> xs) (semanticStyleRule s A.styleBase)
 
 semanticRow :: T.BodyToken -> A.Row
 semanticRow (T.Row xs) = A.Row $ fmlMap
@@ -40,8 +40,18 @@ semanticCol (gl, gr) l p (T.Col xs) = A.Col (semanticEach <$> xs) (quot 600 l) g
 gutter :: Int
 gutter = 20
 
-semanticStyle :: [StyleToken] -> Stylesheet
-semanticStyle xs = Map.insert "header" (semanticStyleEach <$> xs) A.styleBase
+semanticStyleRule :: [StyleRuleToken] -> Stylesheet -> Stylesheet
+semanticStyleRule [] s = s
+semanticStyleRule ((ClassRule c r):xs) s =
+    semanticStyleRule xs (Map.insert c (existingStyles ++ (semanticStyleEach <$> r)) s)
     where
     semanticStyleEach :: StyleToken -> A.Style
     semanticStyleEach (T.TextColor x) = A.TextColor x
+    existingStyles :: [A.Style]
+    existingStyles = concat (Map.lookup c s)
+
+-- semanticStyle :: [StyleToken] -> Stylesheet
+-- semanticStyle xs = Map.insert "header" (semanticStyleEach <$> xs) A.styleBase
+--     where
+--     semanticStyleEach :: StyleToken -> A.Style
+--     semanticStyleEach (T.TextColor x) = A.TextColor x

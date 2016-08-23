@@ -20,11 +20,17 @@ iParse aParser source_name input =
 doc :: IParser DocToken
 doc = DocToken <$> style <*> body <* eof
 
-style :: IParser [StyleToken]
-style = withBlock' (string "style" <* onlySpaces) textCol
+style :: IParser [StyleRuleToken]
+style = withBlock' (string "style" <* onlySpaces) classStyle
+
+classStyle :: IParser StyleRuleToken
+classStyle = withBlock
+    ClassRule
+    (string "." *> manyTill anyChar newline <* onlySpaces)
+    textCol
 
 textCol :: IParser StyleToken
-textCol = TextColor <$> (string "color" *> onlySpaces *> manyTill anyChar newline <* spaces)
+textCol = TextColor <$> (string "text-color" *> onlySpaces *> manyTill anyChar newline <* spaces)
 
 body :: IParser [BodyToken]
 body = withBlock' (string "body" <* onlySpaces) row
