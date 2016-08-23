@@ -26,14 +26,20 @@ style = (withBlock' (string "style" <* onlySpaces) classStyle) <|> (pure [])
 classStyle :: IParser StyleBlock
 classStyle = withBlock
     ClassBlock
-    (string "." *> manyTill anyChar newline <* onlySpaces)
-    textCol
+    (stringLiteral <* onlySpaces)
+    styleRule
+
+styleRule :: IParser Style
+styleRule = (textCol <|> bgCol) <* spaces
 
 textCol :: IParser Style
-textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol <* spaces)
-    where
-    hexCol :: IParser String
-    hexCol = string "#" *> count 6 hexDigit <* newline
+textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol)
+
+bgCol :: IParser Style
+bgCol = BackgroundColor <$> (string "background-color" *> onlySpaces *> hexCol)
+
+hexCol :: IParser String
+hexCol = string "#" *> count 6 hexDigit <* newline
 
 body :: IParser [Body]
 body = withBlock' (string "body" <* onlySpaces) row

@@ -40,7 +40,9 @@ type Width   = Int
 -- Stylesheet.
 type Stylesheet = Map.Map Class [Style]
 
-data Style = TextColor HexColor
+data Style =
+      TextColor HexColor
+    | BackgroundColor HexColor
     deriving (Show)
 
 type HexColor = String

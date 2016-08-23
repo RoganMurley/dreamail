@@ -5,7 +5,9 @@ data Doc = Doc [StyleBlock] [Body]
 data StyleBlock = ClassBlock Class [Style]
     deriving (Show)
 
-data Style = TextColor String
+data Style =
+      TextColor String
+    | BackgroundColor String
     deriving (Show)
 
 data Body =

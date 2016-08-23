@@ -1,7 +1,8 @@
 style
-    .header
+    "header"
         text-color #ffffff
-    .subheader
+        background-color #000000
+    "subheader"
         text-color #123456
 
 body

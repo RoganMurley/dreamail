@@ -103,3 +103,4 @@ inlineStyle s c = A.style $ toValue $ compileStyles $ getStyles c s
 
 compileStyle :: Style -> String
 compileStyle (TextColor c) = "color:" ++ c ++ ";"
+compileStyle (BackgroundColor c) = "background-color:" ++ c ++ ";"
