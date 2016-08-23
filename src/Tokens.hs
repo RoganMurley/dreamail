@@ -11,6 +11,7 @@ data Style =
     | BackgroundColor String
     | Width String
     | Height String
+    | Padding String String
     deriving (Show)
 
 data Body =

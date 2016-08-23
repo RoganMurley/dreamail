@@ -43,10 +43,17 @@ semanticStyleRule :: [StyleBlock] -> Stylesheet -> Stylesheet
 semanticStyleRule [] s = s
 semanticStyleRule ((ClassBlock c r):xs) s =
     semanticStyleRule xs (addStyles c (semanticStyleEach <$> r) s)
+
+semanticStyleEach :: T.Style -> A.Style
+semanticStyleEach (T.FontColor x)       = A.FontColor x
+semanticStyleEach (T.FontSize x)        = A.FontSize (read x)
+semanticStyleEach (T.BackgroundColor x) = A.BackgroundColor x
+semanticStyleEach (T.Width x)           = A.Width x
+semanticStyleEach (T.Height x)          = A.Height x
+semanticStyleEach (T.Padding d x)       = A.Padding (toDir d) (read x)
     where
-    semanticStyleEach :: T.Style -> A.Style
-    semanticStyleEach (T.FontColor x)       = A.FontColor x
-    semanticStyleEach (T.FontSize x)        = A.FontSize (read x)
-    semanticStyleEach (T.BackgroundColor x) = A.BackgroundColor x
-    semanticStyleEach (T.Width x)           = A.Width x
-    semanticStyleEach (T.Height x)          = A.Height x
+    toDir :: String -> Direction
+    toDir "top"    = DirTop
+    toDir "right"  = DirRight
+    toDir "bottom" = DirBottom
+    toDir "left"   = DirLeft

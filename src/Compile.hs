@@ -102,8 +102,12 @@ inlineStyle s c = A.style $ toValue $ compileStyles $ getStyles c s
     compileStyles = concatMap compileStyle
 
 compileStyle :: Style -> String
-compileStyle (FontColor c) = "color:" ++ c ++ ";"
-compileStyle (FontSize s) = "font-size:" ++ (show s) ++ "px;"
-compileStyle (BackgroundColor c) = "background-color:" ++ c ++ ";"
-compileStyle (Width w) = "min-width:" ++ w ++ ";width:" ++ w ++ ";max-width:" ++ w ++ ";"
-compileStyle (Height h) = "min-height:" ++ h ++ ";height:" ++ h ++ ";max-height:" ++ h ++ ";"
+compileStyle (FontColor c)       = "color:#" ++ c ++ ";"
+compileStyle (FontSize s)        = "font-size:" ++ (show s) ++ "px;"
+compileStyle (BackgroundColor c) = "background-color:#" ++ c ++ ";"
+compileStyle (Width w)           = "min-width:" ++ w ++ ";width:" ++ w ++ ";max-width:" ++ w ++ ";"
+compileStyle (Height h)          = "min-height:" ++ h ++ ";height:" ++ h ++ ";max-height:" ++ h ++ ";"
+compileStyle (Padding DirTop p)     = "padding-top:" ++ (show p) ++ "px;"
+compileStyle (Padding DirRight p)   = "padding-right:" ++ (show p) ++ "px;"
+compileStyle (Padding DirBottom p)  = "padding-bottom:" ++ (show p) ++ "px;"
+compileStyle (Padding DirLeft p)    = "padding-left:" ++ (show p) ++ "px;"

@@ -20,6 +20,7 @@ iParse aParser source_name input =
 doc :: IParser Doc
 doc = Doc <$> style <*> body <* eof
 
+
 -- Body.
 body :: IParser [Body]
 body = withBlock' (string "body" <* onlySpaces) row
@@ -80,11 +81,6 @@ attr name = string "." *> onlySpaces *> string name *> onlySpaces *> stringLiter
 optClass :: IParser String
 optClass = attr "class" <|> pure ""
 
-stringLiteral :: IParser String
-stringLiteral = string "\"" *> manyTill anyChar (char '\"')
-
-onlySpaces :: IParser String
-onlySpaces = many space
 
 -- Style.
 style :: IParser [StyleBlock]
@@ -97,7 +93,7 @@ classStyle = withBlock
     styleRule
 
 styleRule :: IParser Style
-styleRule = ((try fontCol) <|> (try fontSize) <|> bgCol <|> width <|> height) <* spaces
+styleRule = ((try fontCol) <|> (try fontSize) <|> bgCol <|> width <|> height <|> padding) <* spaces
 
 fontCol :: IParser Style
 fontCol = FontColor <$> (string "font-color" *> onlySpaces *> hexCol)
@@ -113,6 +109,20 @@ width = Width <$> (string "width" *> onlySpaces *> manyTill anyChar newline)
 
 height :: IParser Style
 height = Height <$> (string "height" *> onlySpaces *> manyTill anyChar newline)
+
+padding :: IParser Style
+padding = Padding <$> (string "padding-" *> paddingDir) <*> (onlySpaces *> many1 digit <* string "px")
+    where
+    paddingDir :: IParser String
+    paddingDir = string "top" <|> string "right" <|> string "bottom" <|> string "left"
+
+
+-- Utils.
+stringLiteral :: IParser String
+stringLiteral = string "\"" *> manyTill anyChar (char '\"')
+
+onlySpaces :: IParser String
+onlySpaces = many space
 
 hexCol :: IParser String
 hexCol = string "#" *> count 6 hexDigit <* newline

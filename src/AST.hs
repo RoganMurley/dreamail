@@ -25,6 +25,9 @@ data Col = Col [Body] Width GutterL GutterR Position
 data Position = First | Middle | Last
     deriving (Show)
 
+data Direction = DirTop | DirRight | DirBottom | DirLeft
+    deriving (Show)
+
 data HeadingLevel = H1 | H2 | H3 | H4 | H5 | H6
     deriving (Show)
 
@@ -46,6 +49,7 @@ data Style =
     | BackgroundColor HexColor
     | Width String
     | Height String
+    | Padding Direction Int
     deriving (Show)
 
 type HexColor = String
