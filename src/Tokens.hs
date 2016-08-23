@@ -6,7 +6,8 @@ data StyleBlock = ClassBlock Class [Style]
     deriving (Show)
 
 data Style =
-      TextColor String
+      FontColor String
+    | FontSize String
     | BackgroundColor String
     | Width String
     | Height String

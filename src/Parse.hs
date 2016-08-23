@@ -20,33 +20,7 @@ iParse aParser source_name input =
 doc :: IParser Doc
 doc = Doc <$> style <*> body <* eof
 
-style :: IParser [StyleBlock]
-style = (withBlock' (string "style" <* onlySpaces) classStyle) <|> (pure [])
-
-classStyle :: IParser StyleBlock
-classStyle = withBlock
-    ClassBlock
-    (stringLiteral <* onlySpaces)
-    styleRule
-
-styleRule :: IParser Style
-styleRule = (textCol <|> bgCol <|> width <|> height) <* spaces
-
-textCol :: IParser Style
-textCol = TextColor <$> (string "text-color" *> onlySpaces *> hexCol)
-
-bgCol :: IParser Style
-bgCol = BackgroundColor <$> (string "background-color" *> onlySpaces *> hexCol)
-
-width :: IParser Style
-width = Width <$> (string "width" *> onlySpaces *> manyTill anyChar newline)
-
-height :: IParser Style
-height = Height <$> (string "height" *> onlySpaces *> manyTill anyChar newline)
-
-hexCol :: IParser String
-hexCol = string "#" *> count 6 hexDigit <* newline
-
+-- Body.
 body :: IParser [Body]
 body = withBlock' (string "body" <* onlySpaces) row
 
@@ -111,3 +85,34 @@ stringLiteral = string "\"" *> manyTill anyChar (char '\"')
 
 onlySpaces :: IParser String
 onlySpaces = many space
+
+-- Style.
+style :: IParser [StyleBlock]
+style = (withBlock' (string "style" <* onlySpaces) classStyle) <|> (pure [])
+
+classStyle :: IParser StyleBlock
+classStyle = withBlock
+    ClassBlock
+    (stringLiteral <* onlySpaces)
+    styleRule
+
+styleRule :: IParser Style
+styleRule = ((try fontCol) <|> (try fontSize) <|> bgCol <|> width <|> height) <* spaces
+
+fontCol :: IParser Style
+fontCol = FontColor <$> (string "font-color" *> onlySpaces *> hexCol)
+
+fontSize :: IParser Style
+fontSize = FontSize <$> (string "font-size" *> onlySpaces *> many1 digit <* string "px")
+
+bgCol :: IParser Style
+bgCol = BackgroundColor <$> (string "background-color" *> onlySpaces *> hexCol)
+
+width :: IParser Style
+width = Width <$> (string "width" *> onlySpaces *> manyTill anyChar newline)
+
+height :: IParser Style
+height = Height <$> (string "height" *> onlySpaces *> manyTill anyChar newline)
+
+hexCol :: IParser String
+hexCol = string "#" *> count 6 hexDigit <* newline

@@ -45,7 +45,8 @@ semanticStyleRule ((ClassBlock c r):xs) s =
     semanticStyleRule xs (addStyles c (semanticStyleEach <$> r) s)
     where
     semanticStyleEach :: T.Style -> A.Style
-    semanticStyleEach (T.TextColor x)       = A.TextColor x
+    semanticStyleEach (T.FontColor x)       = A.FontColor x
+    semanticStyleEach (T.FontSize x)        = A.FontSize (read x)
     semanticStyleEach (T.BackgroundColor x) = A.BackgroundColor x
     semanticStyleEach (T.Width x)           = A.Width x
     semanticStyleEach (T.Height x)          = A.Height x

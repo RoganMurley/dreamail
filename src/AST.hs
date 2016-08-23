@@ -41,7 +41,8 @@ type Width   = Int
 type Stylesheet = Map.Map Class [Style]
 
 data Style =
-      TextColor HexColor
+      FontColor HexColor
+    | FontSize Int
     | BackgroundColor HexColor
     | Width String
     | Height String
